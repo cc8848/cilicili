@@ -1,0 +1,1 @@
+git clone ssh://git@10.11.67.205:4396/home/git/cilicili

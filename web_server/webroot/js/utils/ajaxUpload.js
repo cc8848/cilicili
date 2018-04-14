@@ -3,8 +3,8 @@ const ajaxUpload = {
   upload(data) {
     let json = {};
     $.ajax({
-      url: API_SERVER_padEnd("upload")
-      , data: data
+      url: `${UPLOAD_SERVER}/upload/${utils.getCookie('apply')}`
+      , data
       , type: 'POST'
       , encType: 'multipart/form-data'
       , processData: false

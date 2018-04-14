@@ -27,5 +27,14 @@ const ajaxLogin = {
         json = response;
       });
     return json;
+  }, apply(ussage) {
+    let json = {};
+    $.post(
+      API_SERVER_padEnd("apply"), {
+        ussage, token: utils.getCookie("token")
+      }, response => {
+        json = response;
+      });
+    return json;
   }
 };

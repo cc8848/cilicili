@@ -126,7 +126,7 @@
         <version>9.4.8.v20171121</version>
         <configuration>
           <httpConnector>
-            <port>10089</port>
+            <port>10087</port>
           </httpConnector>
         </configuration>
       </plugin>
@@ -149,5 +149,4 @@
       </resource>
     </resources>
   </build>
-
 </project>

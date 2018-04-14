@@ -9,10 +9,7 @@ import cilicili.jz2.utils.TokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -22,10 +19,10 @@ import java.util.Map;
 
 @Controller
 public class UploadControllerImpl extends baseController implements IUploadController {
-	@RequestMapping (value = "/upload", method = RequestMethod.POST)
+	@RequestMapping (value = "/upload/{token}", method = RequestMethod.POST)
 	@ResponseBody
 	@Override
-	public Map<String, Serializable> upload(MultipartFile file, String token) {
+	public Map<String, Serializable> upload(MultipartFile file, @PathVariable ("token") String token) {
 		do {
 			result.put("status", "failure");
 			try {
@@ -66,6 +63,12 @@ public class UploadControllerImpl extends baseController implements IUploadContr
 			}
 		} while (false);
 		return result;
+	}
+	
+	@RequestMapping (value = "/404", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Serializable> handleError() throws Exception {
+		throw new Exception();
 	}
 	
 	@ResponseBody

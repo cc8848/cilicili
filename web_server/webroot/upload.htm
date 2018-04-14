@@ -56,7 +56,8 @@
             </tr>
             <tr>
               <td>视频描述（500字 以内）</td>
-              <td><input class="form-control" type="text" v-model="videofile.description" minlength="1" maxlength="500"></td>
+              <td><input class="form-control" type="text" v-model="videofile.description" minlength="1" maxlength="500">
+              </td>
             </tr>
             <tr>
               <td>封面图</td>
@@ -106,7 +107,7 @@
   const upload_vue = new Vue({
     el: '#upload_vue'
     , data: {
-       login: LOGIN_STATUS.status
+      login: LOGIN_STATUS.status
       , videofile: {
         title: ''
         , url: ''
@@ -130,20 +131,20 @@
         if (e.target.files[0] === undefined) {
           this.videoSelected = false;
           this.totalInfo = '请选择 mp4 视频文件';
-          this.totalInfoColor='danger';
+          this.totalInfoColor = 'danger';
           return;
         }
         let videosize = e.target.files[0].size;
         if (videosize >= 52428800) {
           this.videoSelected = false;
           this.totalInfo = '所选文件大小超过上限 50M，请重新选择';
-          this.totalInfoColor='danger';
+          this.totalInfoColor = 'danger';
           this.videofile.title = '';
           this.videofile.description = '';
         } else {
           this.videoSelected = true;
           this.totalInfo = '已选择 ' + e.target.files[0].name;
-          this.totalInfoColor='success';
+          this.totalInfoColor = 'success';
           this.videofile.title = e.target.files[0].name.replace('.mp4', '');
           this.videofile.description = '';
         }
@@ -181,19 +182,36 @@
         this.uploadClicked = true;
         this.uploadInfo = '正在上传 ...';
         this.uploadInfoColor = 'warning';
-        let {status, msg, url} = ajaxUpload.upload(new FormData(document.forms['imageform']));
+        let {status, msg, token} = ajaxLogin.apply("upload_file");
         if (status === undefined || status === "failure") {
           msg = msg || '网络连接异常';
-          this.uploadInfo = '图片' + msg + '， 请刷新后重试';
+          this.uploadInfoColor = 'danger';
+          this.uploadInfo = msg;
+        } else if (status === "success") {
+          utils.setCookie("apply", token);
+        }
+        let url = "";
+        ({status, msg, url} = ajaxUpload.upload(new FormData(document.forms['imageform'])));
+        if (status === undefined || status === "failure") {
+          msg = msg || '网络连接异常';
+          this.uploadInfo = '图片上传失败：' + msg + '， 请刷新后重试';
           this.uploadInfoColor = 'danger';
           return;
         } else if (status === "success") {
           this.videofile.picUrl = url;
         }
+        ({status, msg, token} = ajaxLogin.apply("upload_file"));
+        if (status === undefined || status === "failure") {
+          msg = msg || '网络连接异常';
+          this.uploadInfoColor = 'danger';
+          this.uploadInfo = msg;
+        } else if (status === "success") {
+          utils.setCookie("apply", token);
+        }
         ({status, msg, url} = ajaxUpload.upload(new FormData(document.forms['videoform'])));
         if (status === undefined || status === "failure") {
           msg = msg || '网络连接异常';
-          this.uploadInfo = '视频' + msg + '， 请刷新后重试';
+          this.uploadInfo = '视频上传失败：' + msg + '， 请刷新后重试';
           this.uploadInfoColor = 'danger';
           return;
         } else if (status === "success") {

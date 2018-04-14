@@ -114,7 +114,7 @@
         }
         this.tipFailure = false;
         this.msg = '';
-        const {status, msg} = ajaxUser.add({
+        let {status, msg} = ajaxUser.add({
           username: this.username,
           password: this.password
         });
@@ -122,11 +122,18 @@
           this.tipFailure = true;
           this.msg = msg || '网络连接异常';
         } else if (status === "success") {
-          ajaxLogin.login({
+          let token = '';
+          ({status, msg, token} = ajaxLogin.login({
             username: this.username,
             password: this.password
-          });
-          location.href = "index.htm";
+          }));
+          if (status === undefined || status === "failure") {
+            this.tipFailure = true;
+            this.msg = msg || '网络连接异常';
+          } else if (status === "success") {
+            utils.setCookie("token", token);
+            location.href = "index.htm";
+          }
         }
       }
     }

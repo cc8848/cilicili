@@ -104,9 +104,44 @@ public class UserControllerImpl extends baseController implements IUserControlle
 		return result;
 	}
 	
+	@RequestMapping (value = "/update", method = RequestMethod.POST)
+	@ResponseBody
 	@Override
-	public Map<String, Serializable> updateUser(User user) {
-		return null;
+	public Map<String, Serializable> updateUser(User user, String token) {
+		result.put("status", "failure");
+		try {
+			Token tokenCheck = TokenUtil.checkToken(token, TokenUtil.TokenUssage.MODIFY_USER_SETTINGS);
+			User userCheck = userService.findUserById(tokenCheck.getUserId());
+			if (userCheck == null) {
+				throw new TokenUtil.TokenNotFound("用户不存在");
+			}
+			do {
+				if (user.getUsername() == null) {
+					result.put("msg", "用户名为空");
+					break;
+				} else if (user.getUsername().length() == 0 || user.getUsername().length() >= 20) {
+					result.put("msg", "用户名为空或超过20长度限制");
+					break;
+				}
+				if (user.getPassword() == null) {
+					result.put("msg", "密码为空");
+					break;
+				} else if (user.getPassword().length() == 0 || user.getPassword().length() >= 20) {
+					result.put("msg", "密码为空或超过20长度限制");
+					break;
+				}
+				user.setId(userCheck.getId());
+				try {
+					userService.updateUser(user);
+					result.put("status", "success");
+				} catch (Exception e) {
+					result.put("msg", user.getUsername() + " 已被注册");
+				}
+			} while (false);
+		} catch (TokenUtil.TokenExpired | TokenUtil.TokenNotFound | TokenUtil.TokenOverAuthed | TokenUtil.TokenUssageNotMatched tokenError) {
+			result.put("msg", tokenError.getMessage());
+		}
+		return result;
 	}
 	
 	@ResponseBody

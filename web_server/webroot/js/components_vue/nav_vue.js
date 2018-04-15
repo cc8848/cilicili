@@ -17,7 +17,7 @@ const nav_vue = new Vue({
   , template:
     `<div class="container">
       <div class="row clearfix">
-          <div class="col-md-12 column">
+          <div class="col-md-12">
               <nav class="navbar navbar-default navbar-static-top" role="navigation">
                   <div class="navbar-header">
                       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">

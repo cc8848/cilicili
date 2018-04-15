@@ -130,11 +130,6 @@ public class VideoControllerImpl extends baseController implements IVideoControl
 		return result;
 	}
 	
-	@Override
-	public Map<String, Serializable> updateUser(Video video) {
-		return null;
-	}
-	
 	@ResponseBody
 	@ExceptionHandler ({Exception.class})
 	public Map<String, Serializable> exceptionHandle(Exception e) {

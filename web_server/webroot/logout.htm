@@ -16,20 +16,26 @@
 </head>
 <body>
 <div id="nav_vue"></div>
-<div class="container">
-  <div class="row clearfix">
-    <div class="col-md-12 column text-center">
-      <h1>您已退出</h1>
-      <br>
-      <button class="btn btn-success" onclick="window.location='index.htm'">返回主页</button>
+<div id="panel_vue" class="container">
+    <div class="row clearfix">
+      <div class="col-md-12 text-center">
+        <h1>您已退出</h1>
+        <br>
+        <button class="btn btn-success" onclick="window.location='index.htm'">返回主页</button>
+      </div>
     </div>
-  </div>
 </div>
 <div id="footer_vue"></div>
 
 <script src="js/libs/bootstrap.js"></script>
 <script src="js/libs/vue.js"></script>
 
+<script>
+  if (LOGIN_STATUS.status) {
+    ajaxLogin.logout();
+    UPDATE_LOGIN_STATUS();
+  }
+</script>
 <script src="js/components_vue/nav_vue.js"></script>
 <script src="js/components_vue/footer_vue.js"></script>
 </body>

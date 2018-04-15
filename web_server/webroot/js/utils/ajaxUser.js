@@ -10,8 +10,7 @@ const ajaxUser = {
         json = response;
       });
     return json;
-  }
-  , findUsername(username) {
+  }, findUsername(username) {
     let json = {};
     $.get(
       API_SERVER_padEnd("user/findUsername"), {
@@ -21,12 +20,20 @@ const ajaxUser = {
         json = response;
       });
     return json;
-  }
-  , add({username, password}) {
+  }, add({username, password}) {
     let json = {};
     $.post(
       API_SERVER_padEnd("user/add"), {
         username, password
+      }, response => {
+        json = response;
+      });
+    return json;
+  }, update({username, password}) {
+    let json = {};
+    $.post(
+      API_SERVER_padEnd("user/update"), {
+        username, password, token: utils.getCookie("apply")
       }, response => {
         json = response;
       });

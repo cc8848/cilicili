@@ -12,5 +12,5 @@ public interface IUserController {
 	
 	Map<String, Serializable> addUser(User user);
 	
-	Map<String, Serializable> updateUser(User user);
+	Map<String, Serializable> updateUser(User user, String token);
 }

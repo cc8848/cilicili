@@ -20,25 +20,25 @@ public class TokenUtil {
 	}
 	
 	public static class TokenExpired extends Error {
-		TokenExpired(String message) {
+		public TokenExpired(String message) {
 			super(message);
 		}
 	}
 	
 	public static class TokenNotFound extends Error {
-		TokenNotFound(String message) {
+		public TokenNotFound(String message) {
 			super(message);
 		}
 	}
 	
 	public static class TokenOverAuthed extends Error {
-		TokenOverAuthed(String message) {
+		public TokenOverAuthed(String message) {
 			super(message);
 		}
 	}
 	
 	public static class TokenUssageNotMatched extends Error {
-		TokenUssageNotMatched(String message) {
+		public TokenUssageNotMatched(String message) {
 			super(message);
 		}
 	}

@@ -20,12 +20,12 @@
 <div id="upload_vue" class="container">
   <template v-if="login">
     <div class="row clearfix">
-      <div class="col-md-12 column text-center">
+      <div class="col-md-12 text-center">
         <h1>上传视频</h1>
       </div>
     </div>
     <div v-if="!uploadFinished" class="row clearfix">
-      <div class="col-md-12 column text-center">
+      <div class="col-md-12 text-center">
         <br>
         <form name="videoform" style="display: none">
           <input name="file" @change="selectVideo" id="videofile" type="file" accept=".mp4">
@@ -34,14 +34,15 @@
       </div>
     </div>
     <div v-if="!uploadFinished" class="row clearfix">
-      <div class="col-md-8 col-md-offset-2 column text-center">
+      <div class="col-md-8 col-md-offset-2 text-center">
         <br>
-        <div v-if="totalInfo.length > 0" :class="['alert', 'alert-' + totalInfoColor]">{{totalInfo}}</div>
+        <div v-if="totalInfo.length > 0" :class="['alert', 'alert-' + totalInfoColor]" style="overflow-wrap: break-word">
+          {{totalInfo}}</div>
       </div>
     </div>
     <template v-if="videoSelected">
       <div v-if="!uploadFinished" class="row clearfix">
-        <div class="col-md-8 col-md-offset-2 column text-center">
+        <div class="col-md-8 col-md-offset-2 text-center">
           <table class="table table-striped">
             <thead>
             <tr>
@@ -65,8 +66,12 @@
                 <form name="imageform" style="display: none">
                   <input name="file" @change="selectImage" id="imagefile" type="file" accept=".png">
                 </form>
-                <button class="btn btn-info" onclick="$('#imagefile').click()">选择图片文件</button>
-                <br><br>{{imageInfo}}
+                <button v-if="!imageSelected" class="btn btn-info" onclick="$('#imagefile').click()">
+                  选择图片文件
+                </button>
+                <img v-if="imageData.length > 0" :src="imageData" onclick="$('#imagefile').click()"
+                     width="300" height="200" style="cursor: pointer" title="点击重新选择封面图">
+                <p style="margin-top: 10px; max-width: 500px; overflow-wrap: break-word">{{imageInfo}}</p>
               </td>
             </tr>
             </tbody>
@@ -75,7 +80,7 @@
         </div>
       </div>
       <div class="row clearfix">
-        <div class="col-md-6 col-md-offset-3 column text-center">
+        <div class="col-md-6 col-md-offset-3 text-center">
           <br>
           <div v-if="uploadInfo.length > 0" :class="['alert', 'alert-' + uploadInfoColor]">
             {{uploadInfo}}
@@ -87,8 +92,8 @@
   </template>
   <template v-else>
     <div class="row clearfix">
-      <div class="col-md-12 column text-center">
-        <h1>未登录或登录已失效，请登录后查看</h1>
+      <div class="col-md-offset-2 col-md-8 text-center">
+        <div class="text-center alert alert-danger">未登录或登录已失效，请登录后查看</div>
         <br>
         <button class="btn btn-success" onclick="window.location='index.htm'">返回主页</button>
       </div>
@@ -115,6 +120,7 @@
         , uploadUserid: ''
         , description: ''
       }
+      , imageData: ''
       , videoSelected: false
       , totalInfo: '请选择 mp4 视频文件'
       , totalInfoColor: 'danger'
@@ -145,13 +151,15 @@
           this.videoSelected = true;
           this.totalInfo = '已选择 ' + e.target.files[0].name;
           this.totalInfoColor = 'success';
-          this.videofile.title = e.target.files[0].name.replace('.mp4', '');
+          this.videofile.title = e.target.files[0].name.replace('.mp4', '').substr(0,40);
           this.videofile.description = '';
         }
       }
       , selectImage(e) {
+        this.imageData = '';
         if (e.target.files[0] === undefined) {
           this.imageInfo = '请选择封面图文件';
+          this.imageSelected = false;
           return;
         }
         let imagesize = e.target.files[0].size;
@@ -161,6 +169,11 @@
         } else {
           this.imageInfo = '已选择 ' + e.target.files[0].name;
           this.imageSelected = true;
+          let imageReader = new FileReader();
+          imageReader.onload = (event) => {
+            this.imageData = event.target.result;
+          };
+          imageReader.readAsDataURL(e.target.files[0]);
         }
       }
       , upload() {
@@ -184,9 +197,8 @@
         this.uploadInfoColor = 'warning';
         let {status, msg, token} = ajaxLogin.apply("upload_file");
         if (status === undefined || status === "failure") {
-          msg = msg || '网络连接异常';
+          this.uploadInfo = msg || '网络连接异常';
           this.uploadInfoColor = 'danger';
-          this.uploadInfo = msg;
         } else if (status === "success") {
           utils.setCookie("apply", token);
         }

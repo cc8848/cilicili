@@ -25,60 +25,71 @@
 <div id="nav_vue"></div>
 <div class="container">
   <div class="row clearfix">
-    <div class="col-md-12 column">
+    <div class="col-md-12">
       <h1 class="text-center">注册会员</h1>
       <br>
     </div>
   </div>
 </div>
 <div id="panel_vue" class="container">
-  <div class="row clearfix">
-    <div class="col-md-3 column"></div>
-    <div class="col-md-6 column">
-      <form class="form-horizontal" role="form">
-        <div class="form-group">
-          <label class="col-sm-3 control-label">用户名</label>
-          <div class="col-sm-6">
-            <input v-model="username" type="text" class="form-control"
-                   @keyup.enter="signup" minlength="1" maxlength="20"/>
-            <div v-if="tipName" v-cloak class="text-center alert alert-warning">请输入用户名</div>
+  <template v-if="!login">
+    <div class="row clearfix">
+      <div class="col-md-3"></div>
+      <div class="col-md-6">
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">用户名</label>
+            <div class="col-sm-6">
+              <input v-model="username" type="text" class="form-control"
+                     @keyup.enter="signup" minlength="1" maxlength="20"/>
+              <div v-if="tipName" v-cloak class="text-center alert alert-warning">请输入用户名</div>
+            </div>
+            <div class="col-sm-3"></div>
           </div>
-          <div class="col-sm-3"></div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label" minlength="1">密码</label>
-          <div class="col-sm-6">
-            <input v-model="password" type="password" class="form-control"
-                   @keyup.enter="signup" minlength="1" maxlength="20"/>
-            <div v-if="tipPass" v-cloak class="text-center alert alert-warning">请输入密码</div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label" minlength="1">密码</label>
+            <div class="col-sm-6">
+              <input v-model="password" type="password" class="form-control"
+                     @keyup.enter="signup" minlength="1" maxlength="20"/>
+              <div v-if="tipPass" v-cloak class="text-center alert alert-warning">请输入密码</div>
+            </div>
+            <div class="col-sm-3"></div>
           </div>
-          <div class="col-sm-3"></div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label" minlength="1">确认密码</label>
-          <div class="col-sm-6">
-            <input v-model="password2" type="password" class="form-control"
-                   @keyup.enter="signup" minlength="1" maxlength="20"/>
-            <div v-if="tipPass2" v-cloak class="text-center alert alert-warning">请再次输入密码</div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label" minlength="1">确认密码</label>
+            <div class="col-sm-6">
+              <input v-model="password2" type="password" class="form-control"
+                     @keyup.enter="signup" minlength="1" maxlength="20"/>
+              <div v-if="tipPass2" v-cloak class="text-center alert alert-warning">请再次输入密码</div>
+            </div>
+            <div class="col-sm-3"></div>
           </div>
-          <div class="col-sm-3"></div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-3"></div>
-          <div class="col-sm-6">
-            <div v-if="tipFailure" v-cloak class="text-center alert alert-danger">{{msg}}</div>
+          <div class="form-group">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+              <div v-if="tipFailure" v-cloak class="text-center alert alert-danger">{{msg}}</div>
+            </div>
+            <div class="col-sm-3"></div>
           </div>
-          <div class="col-sm-3"></div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-offset-5 col-sm-7">
-            <button type="button" class="btn btn-primary" @click="signup">注册</button>
+          <div class="form-group">
+            <div class="col-sm-offset-5 col-sm-7">
+              <button type="button" class="btn btn-primary" @click="signup">注册</button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
+      <div class="col-md-3"></div>
     </div>
-    <div class="col-md-3 column"></div>
-  </div>
+  </template>
+  <template v-else>
+    <div class="row clearfix">
+      <div class="col-md-offset-2 col-md-8 text-center">
+        <div class="text-center alert alert-danger">您已登录</div>
+        <br>
+        <button class="btn btn-success" onclick="window.location='index.htm'">返回主页</button>
+      </div>
+    </div>
+  </template>
 </div>
 <div id="footer_vue"></div>
 
@@ -91,21 +102,22 @@
   const panel_vue = new Vue({
     el: '#panel_vue',
     data: {
-      tipName: false,
-      tipPass: false,
-      tipPass2: false,
-      tipFailure: false,
-      username: '',
-      password: '',
-      password2: '',
-      msg: ''
-    },
-    methods: {
+      login: LOGIN_STATUS.status
+      , tipName: false
+      , tipPass: false
+      , tipPass2: false
+      , tipFailure: false
+      , username: ''
+      , password: ''
+      , password2: ''
+      , msg: ''
+    }, methods: {
       signup: function () {
-        this.tipName = this.username.length === 0;
-        this.tipPass = this.password.length === 0;
-        this.tipPass2 = this.password2.length === 0;
+        this.tipName = this.username.trim().length === 0;
+        this.tipPass = this.password.trim().length === 0;
+        this.tipPass2 = this.password2.trim().length === 0;
         if (this.tipName || this.tipPass || this.tipPass2) {
+          this.tipFailure = false;
           return;
         } else if (this.password !== this.password2) {
           this.tipFailure = true;

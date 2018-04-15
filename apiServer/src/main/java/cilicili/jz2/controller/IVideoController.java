@@ -15,6 +15,4 @@ public interface IVideoController {
 	Map<String, Serializable> likeVideo(Integer id);
 	
 	Map<String, Serializable> showVideos();
-	
-	Map<String, Serializable> updateUser(Video video);
 }

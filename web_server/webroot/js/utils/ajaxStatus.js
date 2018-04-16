@@ -18,6 +18,11 @@ const VIDEO_INFO = ((id) => {
       status: "failure"
     };
   } else {
-    return ajaxVideo.findId(id);
+    const video = ajaxVideo.findId(id);
+    if (video.status === 'success') {
+      video.video.uploadTime = utils.calcTime(video.video.uploadTime.dateTime);
+      console.log(video.video.uploadTime);
+    }
+    return video;
   }
 })(utils.getRequest("id"));

@@ -28,20 +28,72 @@
         <div class="col-md-12 text-center">
           <hr>
           <video :src="STORAGE_SERVER + video.url" width="75%" height="75%" controls="controls"></video>
-          <hr>
+          <input type="color" style="display: none">
+          <div class="row clearfix">
+            <div class="col-md-8 col-md-offset-2">
+              <input id="colorSelector" type="color" style="display: none" @change="changeColor">
+              <div class="input-group">
+                <span class="input-group-btn">
+                  <button class="btn" type="button" @click="selectColor">颜色</button>
+                </span>
+                <span class="input-group-addon" :style="'color:' + moment.color">{{moment.color}}</span>
+                <input class="form-control" type="text" placeholder="弹幕内容"
+                       @keyup.enter="sendMoment" v-model="moment.content">
+                <span class="input-group-btn">
+                  <button class="btn btn-success" type="button" @click="sendMoment">发送</button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <br>
+        </div>
+        <div class="col-md-2 col-md-offset-2">
+          <button type="button" :class="['btn', 'btn-primary', 'btn-lg', liked ? 'disabled' : '']" @click="like">
+            {{liked ? '(^ω^) 赞过啦！' : '(๑•̀ㅂ•́)و✧ 赞！'}}
+          </button>
+        </div>
+        <div class="col-md-7 col-lg-offset-1">
+          <div class="col-md-3">
+            播放量：{{video.countPlay + 1}}
+          </div>
+          <div class="col-md-8 col-lg-offset-1">
+            上传时间：{{video.uploadTime.toLocaleString()}}
+          </div>
+          <div class="col-md-3">
+            点赞量：{{video.countLike}}
+          </div>
+          <div class="col-md-8 col-lg-offset-1">
+            上传用户：{{video.uploadUsername}}
+          </div>
         </div>
       </div>
+      <hr>
       <div class="row clearfix">
         <div class="col-md-8 col-md-offset-2">
-          <h4>视频简介</h4>
-          <p class="text-muted">{{video.description}}</p>
+          <div class="row clearfix">
+            <div class="col-md-12">
+              <h4>视频简介</h4>
+              <p class="text-muted" style="overflow-wrap: break-word">{{video.description}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row clearfix">
+        <div class="col-md-8 col-md-offset-2">
+          <div class="row clearfix">
+            <div class="col-md-12">
+              <h4>评论</h4>
+              <p class="text-muted" style="overflow-wrap: break-word"></p>
+            </div>
+          </div>
         </div>
       </div>
     </template>
     <template v-else>
       <div class="row clearfix">
         <div class="col-md-12 text-center">
-          <h1>没有该视频</h1>
+          <div class="text-center alert alert-danger">没有该视频</div>
           <br>
           <button class="btn btn-success" onclick="window.location='index.htm'">返回主页</button>
         </div>
@@ -66,6 +118,8 @@
 <script src="js/components_vue/nav_vue.js"></script>
 <script src="js/components_vue/footer_vue.js"></script>
 <script>
+  ajaxVideo.play(VIDEO_INFO.video.id);
+  
   const video_vue = new Vue({
     el: '#video_vue'
     , data: {
@@ -73,8 +127,25 @@
       , login: LOGIN_STATUS.status
       , videoFound: VIDEO_INFO.status === "success"
       , video: VIDEO_INFO.video
+      , liked: false
+      , moment: {
+        color: '#000000'
+        , content: ''
+      }
     }
-    , methods: {}
+    , methods: {
+      like() {
+        if (!this.liked) {
+          ajaxVideo.like(VIDEO_INFO.video.id);
+          this.video.countLike++;
+          this.liked = true;
+        }
+      }, selectColor(){
+        $('#colorSelector').click();
+      }, changeColor(e){
+        this.moment.color = e.target.value;
+      }, sendMoment(){}
+    }
   })
 </script>
 </body>

@@ -2,8 +2,12 @@ package cilicili.jz2.controller.impl;
 
 import cilicili.jz2.controller.IVideoController;
 import cilicili.jz2.controller.baseController;
+import cilicili.jz2.pojo.Token;
+import cilicili.jz2.pojo.User;
 import cilicili.jz2.pojo.Video;
+import cilicili.jz2.service.impl.UserServiceImpl;
 import cilicili.jz2.service.impl.VideoServiceImpl;
+import cilicili.jz2.utils.TokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +24,12 @@ import java.util.Map;
 @Controller
 @RequestMapping ("/video")
 public class VideoControllerImpl extends baseController implements IVideoController {
+	private final UserServiceImpl userService;
 	private final VideoServiceImpl videoService;
 	
 	@Autowired
-	public VideoControllerImpl(VideoServiceImpl videoService) {
+	public VideoControllerImpl(UserServiceImpl userService, VideoServiceImpl videoService) {
+		this.userService = userService;
 		this.videoService = videoService;
 	}
 	
@@ -45,46 +51,56 @@ public class VideoControllerImpl extends baseController implements IVideoControl
 	@RequestMapping ("/add")
 	@ResponseBody
 	@Override
-	public Map<String, Serializable> addVideo(Video video) {
+	public Map<String, Serializable> addVideo(Video video, String token) {
 		result.put("status", "failure");
-		do {
-			if (video.getTitle() == null) {
-				result.put("msg", "视频标题为空");
-				break;
-			} else if (video.getTitle().length() == 0 || video.getTitle().length() >= 50) {
-				result.put("msg", "视频标题为空或超过50长度限制");
-				break;
+		User user;
+		try {
+			Token tokenCheck = TokenUtil.checkToken(token, TokenUtil.TokenUssage.DEFAULT);
+			user = userService.findUserById(tokenCheck.getUserId());
+			if (user == null) {
+				throw new TokenUtil.TokenNotFound("用户不存在");
 			}
-			if (video.getUrl() == null) {
-				result.put("msg", "视频地址为空");
-				break;
-			} else if (video.getUrl().length() == 0 || video.getUrl().length() >= 100) {
-				result.put("msg", "视频地址为空或超过100长度限制");
-				break;
-			}
-			if (video.getUploadUserid() == null) {
-				result.put("msg", "上传用户id为空");
-				break;
-			}
-			if (video.getPicUrl() == null) {
-				result.put("msg", "视频封面地址为空");
-				break;
-			} else if (video.getPicUrl().length() == 0 || video.getPicUrl().length() >= 100) {
-				result.put("msg", "视频封面地址为空或超过100长度限制");
-				break;
-			}
-			video.setId(null);
-			video.setUploadTime(ZonedDateTime.now());
-			video.setCountPlay(0);
-			video.setCountLike(0);
-			try {
-				videoService.addVideo(video);
-				result.put("status", "success");
-				video = videoService.findVideoByUrl(video.getUrl());
-				result.put("video", video);
-			} catch (Exception e) {
-			}
-		} while (false);
+			do {
+				if (video.getTitle() == null) {
+					result.put("msg", "视频标题为空");
+					break;
+				} else if (video.getTitle().length() == 0 || video.getTitle().length() >= 50) {
+					result.put("msg", "视频标题为空或超过50长度限制");
+					break;
+				}
+				if (video.getUrl() == null) {
+					result.put("msg", "视频地址为空");
+					break;
+				} else if (video.getUrl().length() == 0 || video.getUrl().length() >= 100) {
+					result.put("msg", "视频地址为空或超过100长度限制");
+					break;
+				}
+				if (video.getUploadUserid() == null) {
+					result.put("msg", "上传用户id为空");
+					break;
+				}
+				if (video.getPicUrl() == null) {
+					result.put("msg", "视频封面地址为空");
+					break;
+				} else if (video.getPicUrl().length() == 0 || video.getPicUrl().length() >= 100) {
+					result.put("msg", "视频封面地址为空或超过100长度限制");
+					break;
+				}
+				video.setId(null);
+				video.setUploadTime(ZonedDateTime.now());
+				video.setCountPlay(0);
+				video.setCountLike(0);
+				try {
+					videoService.addVideo(video);
+					result.put("status", "success");
+					video = videoService.findVideoByUrl(video.getUrl());
+					result.put("video", video);
+				} catch (Exception e) {
+				}
+			} while (false);
+		} catch (TokenUtil.TokenExpired | TokenUtil.TokenNotFound | TokenUtil.TokenOverAuthed | TokenUtil.TokenUssageNotMatched tokenError) {
+			result.put("msg", tokenError.getMessage());
+		}
 		return result;
 	}
 	
@@ -126,7 +142,7 @@ public class VideoControllerImpl extends baseController implements IVideoControl
 	@ResponseBody
 	@Override
 	public Map<String, Serializable> showVideos() {
-		result.put("videos", (ArrayList<Video>)videoService.showVideos());
+		result.put("videos", (ArrayList<Video>) videoService.showVideos());
 		return result;
 	}
 	

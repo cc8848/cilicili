@@ -13,6 +13,12 @@
   <script src="js/utils/ajaxLogin.js"></script>
   <script src="js/utils/ajaxVideo.js"></script>
   <script src="js/utils/ajaxStatus.js"></script>
+  <style>
+    #banner {
+      margin: auto;
+      max-height: 400px;
+    }
+  </style>
 </head>
 <body>
 <div id="nav_vue"></div>
@@ -20,8 +26,53 @@
   <div class="row clearfix">
     <div class="col-md-12">
       <h1 class="text-center">cilicili 视频网站</h1>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row clearfix">
+    <div class="col-md-12">
+      <hr>
+      <h4 class="lead">最热推荐</h4>
       <br>
     </div>
+  </div>
+  <div class="row clearfix">
+    <div class="col-md-12">
+      <div class="carousel slider" id="banner">
+        <ol class="carousel-indicators">
+          <li data-slide-to="0" data-target="#banner" class="active"></li>
+          <li data-slide-to="1" data-target="#banner"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="item active">
+            <img src="img/banner_0.png"/>
+          </div>
+          <div class="item">
+            <img src="img/banner_1.png"/>
+          </div>
+          <a data-slide="prev" href="#banner" class="left carousel-control">&lt;</a>
+          <a data-slide="next" href="#banner" class="right carousel-control">&gt;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="all_vue" class="container">
+  <div class="row clearfix">
+    <div class="col-md-12">
+      <hr>
+      <h4 class="lead">全部视频</h4>
+      <br>
+    </div>
+  </div>
+  <div class="row clearfix">
+    <template v-for="video in videos">
+      <div class="col-md-2 col-md-offset-1">
+        <img :src="STORAGE_SERVER + video.picUrl" width="150" height="100">
+        <p>{{video.title}}</p>
+      </div>
+    </template>
   </div>
 </div>
 <div id="footer_vue"></div>
@@ -32,5 +83,22 @@
 <script src="js/components_vue/nav_vue.js"></script>
 <script src="js/components_vue/footer_vue.js"></script>
 
+<script>
+  const videos = ajaxVideo.show();
+  
+  const all_vue = new Vue({
+    el: '#all_vue'
+    , data: {
+      STORAGE_SERVER: STORAGE_SERVER + '/'
+      , videos: videos.videos
+    }, methods: {
+      next() {
+      
+      }, before() {
+      
+      }
+    }
+  });
+</script>
 </body>
 </html>

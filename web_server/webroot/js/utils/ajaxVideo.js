@@ -9,18 +9,16 @@ const ajaxVideo = {
         json = response;
       });
     return json;
-  }
-  , add({title, url, uploadUserid, picUrl, description}) {
+  }, add({title, url, uploadUserid, picUrl, description}) {
     let json = {};
     $.post(
       API_SERVER_padEnd("video/add"), {
-        title, url, uploadUserid, picUrl, description
+        title, url, uploadUserid, picUrl, description, token: utils.getCookie("token")
       }, response => {
         json = response;
       });
     return json;
-  }
-  , play(id) {
+  }, play(id) {
     let json = {};
     $.post(
       API_SERVER_padEnd("video/play"), {
@@ -29,8 +27,7 @@ const ajaxVideo = {
         json = response;
       });
     return json;
-  }
-  , like(id) {
+  }, like(id) {
     let json = {};
     $.post(
       API_SERVER_padEnd("video/like"), {
@@ -39,12 +36,10 @@ const ajaxVideo = {
         json = response;
       });
     return json;
-  }
-  , show() {
+  }, show() {
     let json = {};
     $.post(
-      API_SERVER_padEnd("video/show"), {
-      }, response => {
+      API_SERVER_padEnd("video/show"), {}, response => {
         json = response;
       });
     return json;

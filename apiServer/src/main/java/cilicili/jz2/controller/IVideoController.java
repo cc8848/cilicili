@@ -8,7 +8,7 @@ import java.util.Map;
 public interface IVideoController {
 	Map<String, Serializable> findVideoById(int id);
 	
-	Map<String, Serializable> addVideo(Video video);
+	Map<String, Serializable> addVideo(Video video, String token);
 	
 	Map<String, Serializable> playVideo(Integer id);
 	

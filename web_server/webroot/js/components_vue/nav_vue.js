@@ -10,7 +10,6 @@ const nav_vue = new Vue({
   }
   , methods: {
     logout() {
-      ajaxLogin.logout();
       window.location = 'logout.htm';
     }
   }

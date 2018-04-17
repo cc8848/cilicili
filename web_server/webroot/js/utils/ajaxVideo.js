@@ -36,10 +36,12 @@ const ajaxVideo = {
         json = response;
       });
     return json;
-  }, show() {
+  }, show(offset) {
     let json = {};
     $.post(
-      API_SERVER_padEnd("video/show"), {}, response => {
+      API_SERVER_padEnd("video/show"), {
+        offset
+      }, response => {
         json = response;
       });
     return json;

@@ -107,11 +107,17 @@ public class UserControllerImpl extends baseController implements IUserControlle
 	@RequestMapping (value = "/update", method = RequestMethod.POST)
 	@ResponseBody
 	@Override
-	public Map<String, Serializable> updateUser(User user, String token) {
+	public Map<String, Serializable> updateUser(User user, String token, String apply) {
 		result.put("status", "failure");
 		try {
-			Token tokenCheck = TokenUtil.checkToken(token, TokenUtil.TokenUssage.MODIFY_USER_SETTINGS);
-			User userCheck = userService.findUserById(tokenCheck.getUserId());
+			Token tokenApply = TokenUtil.checkToken(apply, TokenUtil.TokenUssage.MODIFY_USER_SETTINGS);
+			Token tokenDefault = TokenUtil.checkToken(token, TokenUtil.TokenUssage.DEFAULT);
+			if (tokenApply.getUserId() != tokenDefault.getUserId()) {
+				throw new TokenUtil.TokenNotFound("非本人操作，拒绝授权");
+			}
+			TokenUtil.destoryToken(token);
+			TokenUtil.destoryToken(apply);
+			User userCheck = userService.findUserById(tokenApply.getUserId());
 			if (userCheck == null) {
 				throw new TokenUtil.TokenNotFound("用户不存在");
 			}

@@ -63,8 +63,8 @@ CREATE TABLE `tokens` (
   `id` int(11) NOT NULL COMMENT '唯一id',
   `user_id` int(11) NOT NULL COMMENT '用户id',
   `token` varchar(30) NOT NULL COMMENT '授权码',
-  `applytime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '申请时间',
-  `expiretime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '失效时间',
+  `applytime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '申请时间',
+  `expiretime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '失效时间',
   `count_auth` int(11) NOT NULL COMMENT '授权次数',
   `max_count_auth` int(11) NOT NULL COMMENT '最大授权次数',
   `ussage` varchar(30) NOT NULL COMMENT '用途'

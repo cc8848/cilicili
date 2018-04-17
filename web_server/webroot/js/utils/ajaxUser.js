@@ -33,7 +33,7 @@ const ajaxUser = {
     let json = {};
     $.post(
       API_SERVER_padEnd("user/update"), {
-        username, password, token: utils.getCookie("apply")
+        username, password, token: utils.getCookie("token"), apply: utils.getCookie("apply")
       }, response => {
         json = response;
       });

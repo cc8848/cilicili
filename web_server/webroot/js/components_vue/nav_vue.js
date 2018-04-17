@@ -25,7 +25,7 @@ const nav_vue = new Vue({
                           <span class="icon-bar"></span>
                           <span class="icon-bar"></span>
                       </button>
-                      <a class="navbar-brand" href="index.htm">cilicili</a>
+                      <a class="navbar-brand" href="index.htm">cilicili 嗨视频</a>
                   </div>
                   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                       <ul class="nav navbar-nav">

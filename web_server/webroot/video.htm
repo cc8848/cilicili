@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>视频 - cilicili</title>
   <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/bootstrap-select.css">
   <script src="js/libs/jquery-3.2.1.js"></script>
   <script src="js/utils/utils.js"></script>
   <script src="js/utils/ajaxBase.js"></script>
@@ -30,13 +31,14 @@
           <video :src="STORAGE_SERVER + video.url" width="75%" height="75%" controls="controls"></video>
           <input type="color" style="display: none">
           <div class="row clearfix">
-            <div class="col-md-8 col-md-offset-2">
-              <input id="colorSelector" type="color" style="display: none" @change="changeColor">
+            <div class="col-xs-8 col-xs-offset-2">
               <div class="input-group">
                 <span class="input-group-btn">
-                  <button class="btn" type="button" @click="selectColor">颜色</button>
+                  <select class="form-control selectpicker" v-model="moment.color" title="弹幕颜色">
+                    <option disabled>弹幕颜色</option>
+                    <option v-for="(c, key) in colors">{{key}}</option>
+                  </select>
                 </span>
-                <span class="input-group-addon" :style="'color:' + moment.color">{{moment.color}}</span>
                 <input class="form-control" type="text" placeholder="弹幕内容"
                        @keyup.enter="sendMoment" v-model="moment.content">
                 <span class="input-group-btn">
@@ -47,23 +49,31 @@
           </div>
           <br>
         </div>
-        <div class="col-md-2 col-md-offset-2">
+      </div>
+      <div class="row clearfix">
+        <div class="col-sm-4 text-right">
           <button type="button" :class="['btn', 'btn-primary', 'btn-lg', liked ? 'disabled' : '']" @click="like">
             {{liked ? '(^ω^) 赞过啦！' : '(๑•̀ㅂ•́)و✧ 赞！'}}
           </button>
         </div>
-        <div class="col-md-7 col-lg-offset-1">
-          <div class="col-md-3">
-            播放量：{{video.countPlay + 1}}
-          </div>
-          <div class="col-md-8 col-lg-offset-1">
-            上传时间：{{video.uploadTime.toLocaleString()}}
-          </div>
-          <div class="col-md-3">
-            点赞量：{{video.countLike}}
-          </div>
-          <div class="col-md-8 col-lg-offset-1">
-            上传用户：{{video.uploadUsername}}
+        <div class="col-sm-6">
+          <div class="row clearfix">
+            <div class="col-sm-4">
+              <p>
+                播放量：{{video.countPlay + 1}}
+              </p>
+              <p>
+                点赞量：{{video.countLike}}
+              </p>
+            </div>
+            <div class="col-sm-8">
+              <p>
+                上传时间：{{video.uploadTime.toLocaleString()}}
+              </p>
+              <p>
+                上传用户：{{video.uploadUsername}}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -113,6 +123,7 @@
 <div id="footer_vue"></div>
 
 <script src="js/libs/bootstrap.js"></script>
+<script src="js/libs/bootstrap-select.js"></script>
 <script src="js/libs/vue.js"></script>
 
 <script src="js/components_vue/nav_vue.js"></script>
@@ -129,8 +140,11 @@
       , video: VIDEO_INFO.video
       , liked: false
       , moment: {
-        color: '#000000'
+        color: '白色'
         , content: ''
+      }, colors: {
+        '白色': '#ffffff'
+        , '黑色': '#000000'
       }
     }
     , methods: {
@@ -140,11 +154,8 @@
           this.video.countLike++;
           this.liked = true;
         }
-      }, selectColor(){
-        $('#colorSelector').click();
-      }, changeColor(e){
-        this.moment.color = e.target.value;
-      }, sendMoment(){}
+      }, sendMoment() {
+      }
     }
   })
 </script>

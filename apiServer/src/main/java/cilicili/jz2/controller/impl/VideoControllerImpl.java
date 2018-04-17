@@ -8,6 +8,7 @@ import cilicili.jz2.pojo.Video;
 import cilicili.jz2.service.impl.UserServiceImpl;
 import cilicili.jz2.service.impl.VideoServiceImpl;
 import cilicili.jz2.utils.TokenUtil;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,7 +142,11 @@ public class VideoControllerImpl extends baseController implements IVideoControl
 	@RequestMapping ("/show")
 	@ResponseBody
 	@Override
-	public Map<String, Serializable> showVideos() {
+	public Map<String, Serializable> showVideos(Integer offset) {
+		if (offset == null || offset <= 0) {
+			offset = 1;
+		}
+		PageHelper.startPage(offset, 12);
 		result.put("videos", (ArrayList<Video>) videoService.showVideos());
 		return result;
 	}
@@ -151,7 +156,7 @@ public class VideoControllerImpl extends baseController implements IVideoControl
 	public Map<String, Serializable> exceptionHandle(Exception e) {
 		result.clear();
 		result.put("status", "failure");
-		result.put("msg", "未登录或参数错误");
+		result.put("msg", "参数错误");
 		Logger logger = LoggerFactory.getLogger(this.getClass());
 		logger.error(e.getMessage());
 		logger.error(e.getLocalizedMessage());

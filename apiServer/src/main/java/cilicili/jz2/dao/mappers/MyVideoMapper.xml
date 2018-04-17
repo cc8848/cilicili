@@ -19,9 +19,9 @@
       JOIN
       (SELECT
          username 'upload_username',
-         id       'upload_userid'
+         id       'user_id'
        FROM users) AS b
-    WHERE a.id = #{id} AND a.upload_userid = b.upload_userid;
+    WHERE a.id = #{id} AND a.upload_userid = b.user_id;
   </select>
 
   <select id="findByUrl" resultMap="BaseResultMap">
@@ -30,9 +30,9 @@
       JOIN
       (SELECT
          username 'upload_username',
-         id       'upload_userid'
+         id       'user_id'
        FROM users) AS b
-    WHERE a.url = #{url} AND a.upload_userid = b.upload_userid;
+    WHERE a.url = #{url} AND a.upload_userid = b.user_id;
   </select>
 
   <select id="findAllVideo" resultMap="BaseResultMap">
@@ -41,8 +41,9 @@
       JOIN
       (SELECT
          username 'upload_username',
-         id       'upload_userid'
+         id       'user_id'
        FROM users) AS b
-    WHERE a.upload_userid = b.upload_userid
+    WHERE a.upload_userid = b.user_id
+    ORDER BY a.id DESC
   </select>
 </mapper>

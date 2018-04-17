@@ -14,6 +14,10 @@
     <property name="url" value="${db.fullURL}"/>
     <property name="username" value="${db.username}"/>
     <property name="password" value="${db.password}"/>
+    <property name="testOnBorrow" value="true"/>
+    <property name="testOnReturn" value="true"/>
+    <property name="testWhileIdle" value="true"/>
+    <property name="validationQuery" value="SELECT 1 FROM DUAL"/>
   </bean>
 
   <bean class="org.mybatis.spring.SqlSessionFactoryBean">

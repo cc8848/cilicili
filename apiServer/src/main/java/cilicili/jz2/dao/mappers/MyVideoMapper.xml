@@ -21,7 +21,8 @@
          username 'upload_username',
          id       'user_id'
        FROM users) AS b
-    WHERE a.id = #{id} AND a.upload_userid = b.user_id;
+        ON a.upload_userid = b.user_id
+    WHERE a.id = #{id}
   </select>
 
   <select id="findByUrl" resultMap="BaseResultMap">
@@ -32,7 +33,8 @@
          username 'upload_username',
          id       'user_id'
        FROM users) AS b
-    WHERE a.url = #{url} AND a.upload_userid = b.user_id;
+        ON a.upload_userid = b.user_id
+    WHERE a.url = #{url}
   </select>
 
   <select id="findAllVideo" resultMap="BaseResultMap">
@@ -43,7 +45,22 @@
          username 'upload_username',
          id       'user_id'
        FROM users) AS b
-    WHERE a.upload_userid = b.user_id
+        ON a.upload_userid = b.user_id
+    ORDER BY a.id DESC
+  </select>
+
+  <select id="queryVideo" resultMap="BaseResultMap">
+    SELECT *
+    FROM videos AS a
+      JOIN
+      (SELECT
+         username 'upload_username',
+         id       'user_id'
+       FROM users) AS b
+        ON a.upload_userid = b.user_id
+    WHERE a.title LIKE #{keyword}
+          OR a.description LIKE #{keyword}
+          OR b.upload_username LIKE #{keyword}
     ORDER BY a.id DESC
   </select>
 </mapper>

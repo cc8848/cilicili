@@ -15,4 +15,6 @@ public interface IVideoController {
 	Map<String, Serializable> likeVideo(Integer id);
 	
 	Map<String, Serializable> showVideos(Integer offset);
+	
+	Map<String, Serializable> findVideos(Integer offset, String q);
 }

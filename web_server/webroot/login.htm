@@ -78,6 +78,7 @@
         <div class="text-center alert alert-danger">您已登录</div>
         <br>
         <button class="btn btn-success" onclick="window.location='index.htm'">返回主页</button>
+        <br>
       </div>
     </div>
   </template>
@@ -87,13 +88,13 @@
 <script src="js/libs/bootstrap.js"></script>
 <script src="js/libs/vue.js"></script>
 
-<script src="js/components_vue/nav_vue.js"></script>
-<script src="js/components_vue/footer_vue.js"></script>
+<script src="js/vue/nav_vue.js"></script>
+<script src="js/vue/footer_vue.js"></script>
 <script>
   const panel_vue = new Vue({
     el: '#panel_vue'
     , data: {
-      login: LOGIN_STATUS.status
+      login: LOGIN_STATUS.status === true
       , tipName: false
       , tipPass: false
       , tipFailure: false

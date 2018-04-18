@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("videoService")
+@Service ("videoService")
 public class VideoServiceImpl implements IVideoService {
 	private final VideoMapper videoMapper;
 	private final MyVideoMapper myVideoMapper;
@@ -43,5 +43,10 @@ public class VideoServiceImpl implements IVideoService {
 	@Override
 	public List<Video> showVideos() {
 		return myVideoMapper.findAllVideo();
+	}
+	
+	@Override
+	public List<Video> queryVideos(String keyword) {
+		return myVideoMapper.queryVideo("%" + keyword + "%");
 	}
 }

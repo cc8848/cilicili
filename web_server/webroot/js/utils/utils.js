@@ -5,7 +5,7 @@ const utils = {
   }, getRequest(request) {
     let reg = new RegExp("(^|&)" + request + "=([^&]*)(&|$)", "i");
     let result = window.location.search.substr(1).match(reg);
-    if (result != null) return unescape(result[2]);
+    if (result != null) return decodeURI(result[2]);
     return null;
   }, getCookie(name) {
     name = name + '=';

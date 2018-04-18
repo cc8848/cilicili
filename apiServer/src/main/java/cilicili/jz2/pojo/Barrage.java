@@ -1,15 +1,15 @@
 package cilicili.jz2.pojo;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
-public class Moment {
+public class Barrage {
     private Integer id;
 
     private Integer userId;
 
     private Integer videoId;
 
-    private Date sendtime;
+    private ZonedDateTime sendtime;
 
     private String content;
 
@@ -17,7 +17,9 @@ public class Moment {
 
     private Integer offtime;
 
-    public Moment(Integer id, Integer userId, Integer videoId, Date sendtime, String content, String color, Integer offtime) {
+    private Byte position;
+
+    public Barrage(Integer id, Integer userId, Integer videoId, ZonedDateTime sendtime, String content, String color, Integer offtime, Byte position) {
         this.id = id;
         this.userId = userId;
         this.videoId = videoId;
@@ -25,9 +27,10 @@ public class Moment {
         this.content = content;
         this.color = color;
         this.offtime = offtime;
+        this.position = position;
     }
 
-    public Moment() {
+    public Barrage() {
         super();
     }
 
@@ -55,11 +58,11 @@ public class Moment {
         this.videoId = videoId;
     }
 
-    public Date getSendtime() {
+    public ZonedDateTime getSendtime() {
         return sendtime;
     }
 
-    public void setSendtime(Date sendtime) {
+    public void setSendtime(ZonedDateTime sendtime) {
         this.sendtime = sendtime;
     }
 
@@ -85,5 +88,13 @@ public class Moment {
 
     public void setOfftime(Integer offtime) {
         this.offtime = offtime;
+    }
+
+    public Byte getPosition() {
+        return position;
+    }
+
+    public void setPosition(Byte position) {
+        this.position = position;
     }
 }

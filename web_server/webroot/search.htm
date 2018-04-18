@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>主页 - cilicili</title>
+  <title>搜索 - cilicili</title>
   <link rel="stylesheet" href="css/bootstrap.css">
   <script src="js/libs/jquery-3.2.1.js"></script>
   <script src="js/utils/utils.js"></script>
@@ -14,22 +14,6 @@
   <script src="js/utils/ajaxVideo.js"></script>
   <script src="js/utils/ajaxStatus.js"></script>
   <style>
-    #banner {
-      margin: auto;
-      max-height: 400px;
-    }
-    
-    .carousel-control .ltgt {
-      margin: auto;
-      width: 50px;
-      height: 50px;
-      border: 3px solid #ffffff;
-      border-radius: 50%;
-      font-size: 32px;
-      position: relative;
-      top: 45%;
-    }
-    
     .video-box {
       cursor: pointer;
       padding: 5px;
@@ -54,37 +38,14 @@
 </head>
 <body>
 <div id="nav_vue"></div>
-<div class="container">
+<div id="search_vue" class="container">
   <div class="row clearfix">
     <div class="col-md-12">
-      <div class="carousel slider" id="banner">
-        <ol class="carousel-indicators">
-          <li data-slide-to="0" data-target="#banner" class="active"></li>
-          <li data-slide-to="1" data-target="#banner"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="item active">
-            <img src="img/banner_0.png"/>
-          </div>
-          <div class="item">
-            <img src="img/banner_1.png"/>
-          </div>
-          <div data-slide="prev" href="#banner" class="left carousel-control" style="cursor: pointer">
-            <div class="ltgt">&lt;</div>
-          </div>
-          <div data-slide="next" href="#banner" class="right carousel-control" style="cursor: pointer">
-            <div class="ltgt">&gt;</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="all_vue" class="container">
-  <div class="row clearfix">
-    <div class="col-md-12">
-      <hr>
-      <h3>最新视频 🔥</h3>
+      <h4>关键词：</h4>
+      <blockquote>
+        {{q}}
+      </blockquote>
+      <h4>搜索结果：{{total}} 条</h4>
       <br>
     </div>
   </div>
@@ -120,7 +81,7 @@
         <button :class="['btn', 'btn-success', canBefore ? '' : 'disabled']" @click="before">上一页</button>
       </div>
       <div class="col-xs-6 col-xs-offset-1
-                  col-sm-3 col-sm-offset-1
+                  col-sm-3 col-sm-offset-0
                   col-md-3 col-md-offset-1
                   col-lg-2">
         <div class="input-group">
@@ -141,7 +102,7 @@
   <template v-else>
     <div class="row clearfix">
       <div class="col-md-12 text-center">
-        <h1 class="text-center">没有更多视频</h1>
+        <h1 class="text-center">没有找到相关视频</h1>
         <br>
       </div>
     </div>
@@ -160,8 +121,9 @@
   let hasPreviousPage = false;
   let list = [];
   let pages = 0;
+  let total = 0;
   
-  const page = ajaxVideo.show(1);
+  const page = ajaxVideo.find(1, utils.getRequest("q") || '');
   
   if (page.page !== undefined) {
     ({
@@ -170,12 +132,13 @@
         , hasPreviousPage = false // 是否有前一页
         , list = {} // 当前页的元素数组
         , pages = 0 // 总页数
+        , total = 0 // 总个数
       }
     } = page);
   }
   
-  const all_vue = new Vue({
-    el: '#all_vue'
+  const search_vue = new Vue({
+    el: '#search_vue'
     , data: {
       STORAGE_SERVER: STORAGE_SERVER + '/'
       , videos: list
@@ -184,7 +147,9 @@
       , canNext: hasNextPage
       , canBefore: hasPreviousPage
       , pages
+      , total
       , to: 1
+      , q: utils.getRequest('q')
     }, methods: {
       next(e) {
         if (e.target.classList.contains("disabled")) {
@@ -197,7 +162,7 @@
             , hasPreviousPage = false
             , list = {}
           }
-        } = ajaxVideo.show(this.offset);
+        } = ajaxVideo.find(this.offset, utils.getRequest("q"));
         this.videos = list;
         this.videosFound = this.videos.length !== 0;
         this.canNext = hasNextPage;
@@ -214,7 +179,7 @@
             , hasPreviousPage = false
             , list = {}
           }
-        } = ajaxVideo.show(this.offset);
+        } = ajaxVideo.find(this.offset, utils.getRequest("q"));
         this.videos = list;
         this.videosFound = this.videos.length !== 0;
         this.canNext = hasNextPage;
@@ -232,7 +197,7 @@
             , hasPreviousPage = false
             , list = {}
           }
-        } = ajaxVideo.show(this.offset);
+        } = ajaxVideo.find(this.offset, utils.getRequest("q"));
         this.videos = list;
         this.videosFound = this.videos.length !== 0;
         this.canNext = hasNextPage;

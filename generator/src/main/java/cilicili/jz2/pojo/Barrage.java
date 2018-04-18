@@ -1,16 +1,15 @@
 package cilicili.jz2.pojo;
 
-import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.util.Date;
 
-public class Moment implements Serializable {
+public class Barrage {
     private Integer id;
 
     private Integer userId;
 
     private Integer videoId;
 
-    private ZonedDateTime sendtime;
+    private Date sendtime;
 
     private String content;
 
@@ -18,7 +17,9 @@ public class Moment implements Serializable {
 
     private Integer offtime;
 
-    public Moment(Integer id, Integer userId, Integer videoId, ZonedDateTime sendtime, String content, String color, Integer offtime) {
+    private Byte position;
+
+    public Barrage(Integer id, Integer userId, Integer videoId, Date sendtime, String content, String color, Integer offtime, Byte position) {
         this.id = id;
         this.userId = userId;
         this.videoId = videoId;
@@ -26,9 +27,10 @@ public class Moment implements Serializable {
         this.content = content;
         this.color = color;
         this.offtime = offtime;
+        this.position = position;
     }
 
-    public Moment() {
+    public Barrage() {
         super();
     }
 
@@ -56,11 +58,11 @@ public class Moment implements Serializable {
         this.videoId = videoId;
     }
 
-    public ZonedDateTime getSendtime() {
+    public Date getSendtime() {
         return sendtime;
     }
 
-    public void setSendtime(ZonedDateTime sendtime) {
+    public void setSendtime(Date sendtime) {
         this.sendtime = sendtime;
     }
 
@@ -86,5 +88,13 @@ public class Moment implements Serializable {
 
     public void setOfftime(Integer offtime) {
         this.offtime = offtime;
+    }
+
+    public Byte getPosition() {
+        return position;
+    }
+
+    public void setPosition(Byte position) {
+        this.position = position;
     }
 }

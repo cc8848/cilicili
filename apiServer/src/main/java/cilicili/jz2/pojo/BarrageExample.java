@@ -1,17 +1,17 @@
 package cilicili.jz2.pojo;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
 
-public class MomentExample {
+public class BarrageExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public MomentExample() {
+    public BarrageExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -295,52 +295,52 @@ public class MomentExample {
             return (Criteria) this;
         }
 
-        public Criteria andSendtimeEqualTo(Date value) {
+        public Criteria andSendtimeEqualTo(ZonedDateTime value) {
             addCriterion("sendtime =", value, "sendtime");
             return (Criteria) this;
         }
 
-        public Criteria andSendtimeNotEqualTo(Date value) {
+        public Criteria andSendtimeNotEqualTo(ZonedDateTime value) {
             addCriterion("sendtime <>", value, "sendtime");
             return (Criteria) this;
         }
 
-        public Criteria andSendtimeGreaterThan(Date value) {
+        public Criteria andSendtimeGreaterThan(ZonedDateTime value) {
             addCriterion("sendtime >", value, "sendtime");
             return (Criteria) this;
         }
 
-        public Criteria andSendtimeGreaterThanOrEqualTo(Date value) {
+        public Criteria andSendtimeGreaterThanOrEqualTo(ZonedDateTime value) {
             addCriterion("sendtime >=", value, "sendtime");
             return (Criteria) this;
         }
 
-        public Criteria andSendtimeLessThan(Date value) {
+        public Criteria andSendtimeLessThan(ZonedDateTime value) {
             addCriterion("sendtime <", value, "sendtime");
             return (Criteria) this;
         }
 
-        public Criteria andSendtimeLessThanOrEqualTo(Date value) {
+        public Criteria andSendtimeLessThanOrEqualTo(ZonedDateTime value) {
             addCriterion("sendtime <=", value, "sendtime");
             return (Criteria) this;
         }
 
-        public Criteria andSendtimeIn(List<Date> values) {
+        public Criteria andSendtimeIn(List<ZonedDateTime> values) {
             addCriterion("sendtime in", values, "sendtime");
             return (Criteria) this;
         }
 
-        public Criteria andSendtimeNotIn(List<Date> values) {
+        public Criteria andSendtimeNotIn(List<ZonedDateTime> values) {
             addCriterion("sendtime not in", values, "sendtime");
             return (Criteria) this;
         }
 
-        public Criteria andSendtimeBetween(Date value1, Date value2) {
+        public Criteria andSendtimeBetween(ZonedDateTime value1, ZonedDateTime value2) {
             addCriterion("sendtime between", value1, value2, "sendtime");
             return (Criteria) this;
         }
 
-        public Criteria andSendtimeNotBetween(Date value1, Date value2) {
+        public Criteria andSendtimeNotBetween(ZonedDateTime value1, ZonedDateTime value2) {
             addCriterion("sendtime not between", value1, value2, "sendtime");
             return (Criteria) this;
         }
@@ -542,6 +542,66 @@ public class MomentExample {
 
         public Criteria andOfftimeNotBetween(Integer value1, Integer value2) {
             addCriterion("offtime not between", value1, value2, "offtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPositionIsNull() {
+            addCriterion("position is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPositionIsNotNull() {
+            addCriterion("position is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPositionEqualTo(Byte value) {
+            addCriterion("position =", value, "position");
+            return (Criteria) this;
+        }
+
+        public Criteria andPositionNotEqualTo(Byte value) {
+            addCriterion("position <>", value, "position");
+            return (Criteria) this;
+        }
+
+        public Criteria andPositionGreaterThan(Byte value) {
+            addCriterion("position >", value, "position");
+            return (Criteria) this;
+        }
+
+        public Criteria andPositionGreaterThanOrEqualTo(Byte value) {
+            addCriterion("position >=", value, "position");
+            return (Criteria) this;
+        }
+
+        public Criteria andPositionLessThan(Byte value) {
+            addCriterion("position <", value, "position");
+            return (Criteria) this;
+        }
+
+        public Criteria andPositionLessThanOrEqualTo(Byte value) {
+            addCriterion("position <=", value, "position");
+            return (Criteria) this;
+        }
+
+        public Criteria andPositionIn(List<Byte> values) {
+            addCriterion("position in", values, "position");
+            return (Criteria) this;
+        }
+
+        public Criteria andPositionNotIn(List<Byte> values) {
+            addCriterion("position not in", values, "position");
+            return (Criteria) this;
+        }
+
+        public Criteria andPositionBetween(Byte value1, Byte value2) {
+            addCriterion("position between", value1, value2, "position");
+            return (Criteria) this;
+        }
+
+        public Criteria andPositionNotBetween(Byte value1, Byte value2) {
+            addCriterion("position not between", value1, value2, "position");
             return (Criteria) this;
         }
     }

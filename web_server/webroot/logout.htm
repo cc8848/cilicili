@@ -31,12 +31,12 @@
 <script src="js/libs/vue.js"></script>
 
 <script>
-  if (LOGIN_STATUS.status) {
+  if (LOGIN_STATUS.status === true) {
     ajaxLogin.logout();
     UPDATE_LOGIN_STATUS();
   }
 </script>
-<script src="js/components_vue/nav_vue.js"></script>
-<script src="js/components_vue/footer_vue.js"></script>
+<script src="js/vue/nav_vue.js"></script>
+<script src="js/vue/footer_vue.js"></script>
 </body>
 </html>

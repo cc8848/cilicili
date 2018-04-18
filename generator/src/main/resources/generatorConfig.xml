@@ -88,7 +88,7 @@
            enableUpdateByPrimaryKey="true" selectByPrimaryKeyQueryId="true">
     </table>
 
-    <table tableName="moments" domainObjectName="Moment"
+    <table tableName="barrages" domainObjectName="Barrage"
            enableCountByExample="true" enableUpdateByExample="true"
            enableDeleteByExample="true" enableSelectByExample="true"
            selectByExampleQueryId="true" enableDeleteByPrimaryKey="true"

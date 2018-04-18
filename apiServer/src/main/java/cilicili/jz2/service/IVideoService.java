@@ -14,4 +14,6 @@ public interface IVideoService {
 	void updateVideo(Video video);
 	
 	List<Video> showVideos();
+	
+	List<Video> queryVideos(String keyword);
 }

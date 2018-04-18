@@ -9,6 +9,7 @@ import cilicili.jz2.service.impl.UserServiceImpl;
 import cilicili.jz2.service.impl.VideoServiceImpl;
 import cilicili.jz2.utils.TokenUtil;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,11 +144,27 @@ public class VideoControllerImpl extends baseController implements IVideoControl
 	@ResponseBody
 	@Override
 	public Map<String, Serializable> showVideos(Integer offset) {
-		if (offset == null || offset <= 0) {
-			offset = 1;
+		if (offset == null) {
+			offset = 0;
 		}
 		PageHelper.startPage(offset, 12);
-		result.put("videos", (ArrayList<Video>) videoService.showVideos());
+		ArrayList<Video> videos = (ArrayList<Video>) videoService.showVideos();
+		PageInfo<Video> pageInfo = new PageInfo<>(videos);
+		result.put("page", pageInfo);
+		return result;
+	}
+	
+	@RequestMapping ("/find")
+	@ResponseBody
+	@Override
+	public Map<String, Serializable> findVideos(Integer offset, String q) {
+		if (offset == null) {
+			offset = 0;
+		}
+		PageHelper.startPage(offset, 12);
+		ArrayList<Video> videos = (ArrayList<Video>) videoService.queryVideos(q);
+		PageInfo<Video> pageInfo = new PageInfo<>(videos);
+		result.put("page", pageInfo);
 		return result;
 	}
 	

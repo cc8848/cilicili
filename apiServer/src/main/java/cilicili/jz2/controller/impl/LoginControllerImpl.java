@@ -64,6 +64,7 @@ public class LoginControllerImpl extends baseController implements ILoginControl
 			if (user == null) {
 				throw new TokenUtil.TokenNotFound("用户不存在");
 			}
+			user.setPassword(null);
 			result.put("user", user);
 			result.put("status", true);
 		} catch (TokenUtil.TokenExpired | TokenUtil.TokenNotFound | TokenUtil.TokenOverAuthed | TokenUtil.TokenUssageNotMatched tokenError) {

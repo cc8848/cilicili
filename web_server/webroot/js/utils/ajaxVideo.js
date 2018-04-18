@@ -45,5 +45,14 @@ const ajaxVideo = {
         json = response;
       });
     return json;
+  }, find(offset, q) {
+    let json = {};
+    $.post(
+      API_SERVER_padEnd("video/find"), {
+        offset, q
+      }, response => {
+        json = response;
+      });
+    return json;
   }
 };

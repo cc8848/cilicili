@@ -82,8 +82,10 @@
         <div class="col-md-8 col-md-offset-2">
           <div class="row clearfix">
             <div class="col-md-12">
-              <h4>视频简介</h4>
-              <p class="text-muted" style="overflow-wrap: break-word">{{video.description}}</p>
+              <h2>视频简介</h2>
+              <blockquote>
+                <p style="overflow-wrap: break-word">{{video.description}}</p>
+              </blockquote>
             </div>
           </div>
         </div>
@@ -93,7 +95,7 @@
         <div class="col-md-8 col-md-offset-2">
           <div class="row clearfix">
             <div class="col-md-12">
-              <h4>评论</h4>
+              <h2>评论</h2>
               <p class="text-muted" style="overflow-wrap: break-word"></p>
             </div>
           </div>
@@ -116,6 +118,7 @@
         <div class="text-center alert alert-danger">未登录或登录已失效，请登录后查看</div>
         <br>
         <button class="btn btn-success" onclick="window.location='index.htm'">返回主页</button>
+        <br>
       </div>
     </div>
   </template>
@@ -126,8 +129,8 @@
 <script src="js/libs/bootstrap-select.js"></script>
 <script src="js/libs/vue.js"></script>
 
-<script src="js/components_vue/nav_vue.js"></script>
-<script src="js/components_vue/footer_vue.js"></script>
+<script src="js/vue/nav_vue.js"></script>
+<script src="js/vue/footer_vue.js"></script>
 <script>
   ajaxVideo.play(VIDEO_INFO.video.id);
   
@@ -135,7 +138,7 @@
     el: '#video_vue'
     , data: {
       STORAGE_SERVER: STORAGE_SERVER + '/'
-      , login: LOGIN_STATUS.status
+      , login: LOGIN_STATUS.status === true
       , videoFound: VIDEO_INFO.status === "success"
       , video: VIDEO_INFO.video
       , liked: false

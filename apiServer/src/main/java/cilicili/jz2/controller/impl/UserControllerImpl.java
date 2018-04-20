@@ -31,7 +31,7 @@ public class UserControllerImpl extends baseController implements IUserControlle
 	@RequestMapping (value = "/findId", method = RequestMethod.POST)
 	@ResponseBody
 	@Override
-	public Map<String, Serializable> findUserById(int id, String token) {
+	public Map<String, Serializable> findUserById(Integer id, String token) {
 		result.put("status", "failure");
 		try {
 			Token tokenCheck = TokenUtil.checkToken(token, TokenUtil.TokenUssage.DEFAULT);
@@ -110,29 +110,29 @@ public class UserControllerImpl extends baseController implements IUserControlle
 	public Map<String, Serializable> updateUser(User user, String token, String apply) {
 		result.put("status", "failure");
 		try {
-			Token tokenApply = TokenUtil.checkToken(apply, TokenUtil.TokenUssage.MODIFY_USER_SETTINGS);
-			Token tokenDefault = TokenUtil.checkToken(token, TokenUtil.TokenUssage.DEFAULT);
-			if (tokenApply.getUserId() != tokenDefault.getUserId()) {
-				throw new TokenUtil.TokenNotFound("非本人操作，拒绝授权");
-			}
-			TokenUtil.destoryToken(token);
-			TokenUtil.destoryToken(apply);
-			User userCheck = userService.findUserById(tokenApply.getUserId());
-			if (userCheck == null) {
-				throw new TokenUtil.TokenNotFound("用户不存在");
-			}
 			do {
+				Token tokenApply = TokenUtil.checkToken(apply, TokenUtil.TokenUssage.MODIFY_USER_SETTINGS);
+				Token tokenDefault = TokenUtil.checkToken(token, TokenUtil.TokenUssage.DEFAULT);
+				if (!tokenApply.getUserId().equals(tokenDefault.getUserId())) {
+					throw new TokenUtil.TokenNotFound("非本人操作，拒绝授权");
+				}
+				TokenUtil.destoryToken(token);
+				TokenUtil.destoryToken(apply);
+				User userCheck = userService.findUserById(tokenApply.getUserId());
+				if (userCheck == null) {
+					throw new TokenUtil.TokenNotFound("用户不存在");
+				}
 				if (user.getUsername() == null) {
 					result.put("msg", "用户名为空");
 					break;
-				} else if (user.getUsername().length() == 0 || user.getUsername().length() >= 20) {
+				} else if (user.getUsername().length() == 0 || user.getUsername().length() > 20) {
 					result.put("msg", "用户名为空或超过20长度限制");
 					break;
 				}
 				if (user.getPassword() == null) {
 					result.put("msg", "密码为空");
 					break;
-				} else if (user.getPassword().length() == 0 || user.getPassword().length() >= 20) {
+				} else if (user.getPassword().length() == 0 || user.getPassword().length() > 20) {
 					result.put("msg", "密码为空或超过20长度限制");
 					break;
 				}

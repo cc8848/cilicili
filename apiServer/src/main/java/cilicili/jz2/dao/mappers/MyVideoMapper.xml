@@ -37,7 +37,7 @@
     WHERE a.url = #{url}
   </select>
 
-  <select id="findAllVideo" resultMap="BaseResultMap">
+  <select id="findAllVideos" resultMap="BaseResultMap">
     SELECT *
     FROM videos AS a
       JOIN

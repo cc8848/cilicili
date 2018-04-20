@@ -1,8 +1,9 @@
 package cilicili.jz2.pojo;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-public class Barrage {
+public class Barrage implements Serializable {
     private Integer id;
 
     private Integer userId;

@@ -20,7 +20,7 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@Override
-	public User findUserById(int id) {
+	public User findUserById(Integer id) {
 		return userMapper.selectByPrimaryKey(id);
 	}
 	

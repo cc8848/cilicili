@@ -10,7 +10,7 @@ public interface MyVideoMapper {
 	
 	Video findByUrl(@Param ("url") String url);
 	
-	List<Video> findAllVideo();
+	List<Video> findAllVideos();
 	
 	List<Video> queryVideo(@Param ("keyword") String keyword);
 }

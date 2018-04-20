@@ -21,7 +21,7 @@ public class VideoServiceImpl implements IVideoService {
 	}
 	
 	@Override
-	public Video findVideoById(int id) {
+	public Video findVideoById(Integer id) {
 		return myVideoMapper.findById(id);
 	}
 	
@@ -42,7 +42,7 @@ public class VideoServiceImpl implements IVideoService {
 	
 	@Override
 	public List<Video> showVideos() {
-		return myVideoMapper.findAllVideo();
+		return myVideoMapper.findAllVideos();
 	}
 	
 	@Override

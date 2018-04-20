@@ -196,6 +196,7 @@
             hasNextPage = false
             , hasPreviousPage = false
             , list = {}
+            , pages = 0
           }
         } = ajaxVideo.show(this.offset);
         this.videos = list;
@@ -203,6 +204,7 @@
         this.canNext = hasNextPage;
         this.canBefore = hasPreviousPage;
         this.to = this.offset;
+        this.pages = pages;
       }, before(e) {
         if (e.target.classList.contains("disabled")) {
           return;
@@ -213,6 +215,7 @@
             hasNextPage = false
             , hasPreviousPage = false
             , list = {}
+            , pages = 0
           }
         } = ajaxVideo.show(this.offset);
         this.videos = list;
@@ -220,8 +223,9 @@
         this.canNext = hasNextPage;
         this.canBefore = hasPreviousPage;
         this.to = this.offset;
+        this.pages = pages;
       }, go() {
-        if (this.to < 1 || this.to > pages) {
+        if (this.to < 1 || this.to > this.pages) {
           this.to = this.offset;
           return;
         }
@@ -231,12 +235,14 @@
             hasNextPage = false
             , hasPreviousPage = false
             , list = {}
+            , pages = 0
           }
         } = ajaxVideo.show(this.offset);
         this.videos = list;
         this.videosFound = this.videos.length !== 0;
         this.canNext = hasNextPage;
         this.canBefore = hasPreviousPage;
+        this.pages = pages;
       }
     }
   });

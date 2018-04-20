@@ -38,7 +38,7 @@ public class VideoControllerImpl extends baseController implements IVideoControl
 	@RequestMapping ("/findId")
 	@ResponseBody
 	@Override
-	public Map<String, Serializable> findVideoById(int id) {
+	public Map<String, Serializable> findVideoById(Integer id) {
 		Video video = videoService.findVideoById(id);
 		if (video == null) {
 			result.put("status", "failure");
@@ -55,25 +55,24 @@ public class VideoControllerImpl extends baseController implements IVideoControl
 	@Override
 	public Map<String, Serializable> addVideo(Video video, String token) {
 		result.put("status", "failure");
-		User user;
 		try {
-			Token tokenCheck = TokenUtil.checkToken(token, TokenUtil.TokenUssage.DEFAULT);
-			user = userService.findUserById(tokenCheck.getUserId());
-			if (user == null) {
-				throw new TokenUtil.TokenNotFound("用户不存在");
-			}
 			do {
+				Token tokenCheck = TokenUtil.checkToken(token, TokenUtil.TokenUssage.DEFAULT);
+				User user = userService.findUserById(tokenCheck.getUserId());
+				if (user == null) {
+					throw new TokenUtil.TokenNotFound("用户不存在");
+				}
 				if (video.getTitle() == null) {
 					result.put("msg", "视频标题为空");
 					break;
-				} else if (video.getTitle().length() == 0 || video.getTitle().length() >= 50) {
+				} else if (video.getTitle().length() == 0 || video.getTitle().length() > 50) {
 					result.put("msg", "视频标题为空或超过50长度限制");
 					break;
 				}
 				if (video.getUrl() == null) {
 					result.put("msg", "视频地址为空");
 					break;
-				} else if (video.getUrl().length() == 0 || video.getUrl().length() >= 100) {
+				} else if (video.getUrl().length() == 0 || video.getUrl().length() > 100) {
 					result.put("msg", "视频地址为空或超过100长度限制");
 					break;
 				}
@@ -84,7 +83,7 @@ public class VideoControllerImpl extends baseController implements IVideoControl
 				if (video.getPicUrl() == null) {
 					result.put("msg", "视频封面地址为空");
 					break;
-				} else if (video.getPicUrl().length() == 0 || video.getPicUrl().length() >= 100) {
+				} else if (video.getPicUrl().length() == 0 || video.getPicUrl().length() > 100) {
 					result.put("msg", "视频封面地址为空或超过100长度限制");
 					break;
 				}
@@ -98,6 +97,7 @@ public class VideoControllerImpl extends baseController implements IVideoControl
 					video = videoService.findVideoByUrl(video.getUrl());
 					result.put("video", video);
 				} catch (Exception e) {
+					result.put("msg", "未知错误");
 				}
 			} while (false);
 		} catch (TokenUtil.TokenExpired | TokenUtil.TokenNotFound | TokenUtil.TokenOverAuthed | TokenUtil.TokenUssageNotMatched tokenError) {

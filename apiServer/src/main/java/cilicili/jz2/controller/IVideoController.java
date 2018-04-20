@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 public interface IVideoController {
-	Map<String, Serializable> findVideoById(int id);
+	Map<String, Serializable> findVideoById(Integer id);
 	
 	Map<String, Serializable> addVideo(Video video, String token);
 	

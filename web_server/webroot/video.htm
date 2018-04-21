@@ -44,15 +44,68 @@
     
     #canvasBarrage {
       position: absolute;
-      width: 640px;
-      height: 360px;
       pointer-events: none;
       z-index: 1;
     }
-    
-    #videoBarrage {
-      width: 640px;
-      height: 360px;
+
+    @media screen and (min-width: 1281px) {
+      #canvasBarrage {
+        width: 960px;
+        height: 540px;
+      }
+  
+      #videoBarrage {
+        width: 960px;
+        height: 540px;
+      }
+    }
+
+    @media screen and (max-width: 1280px) {
+      #canvasBarrage {
+        width: 800px;
+        height: 450px;
+      }
+  
+      #videoBarrage {
+        width: 800px;
+        height: 450px;
+      }
+    }
+
+    @media screen and (max-width: 1080px) {
+      #canvasBarrage {
+        width: 640px;
+        height: 360px;
+      }
+  
+      #videoBarrage {
+        width: 640px;
+        height: 360px;
+      }
+    }
+
+    @media screen and (max-width: 720px) {
+      #canvasBarrage {
+        width: 480px;
+        height: 270px;
+      }
+  
+      #videoBarrage {
+        width: 480px;
+        height: 270px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      #canvasBarrage {
+        width: 320px;
+        height: 180px;
+      }
+  
+      #videoBarrage {
+        width: 320px;
+        height: 180px;
+      }
     }
   </style>
 </head>

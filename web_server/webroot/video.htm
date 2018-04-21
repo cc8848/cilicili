@@ -15,6 +15,8 @@
   <script src="js/utils/ajaxVideo.js"></script>
   <script src="js/utils/ajaxStatus.js"></script>
   <script src="js/utils/ajaxComment.js"></script>
+  <script src="js/utils/ajaxBarrage.js"></script>
+  <script src="js/libs/barrages.js"></script>
   <style>
     .comment {
       border: none;
@@ -33,10 +35,24 @@
     }
     
     .comment .like {
+      user-select: none;
     }
     
     .comment .content {
       font-size: 24px;
+    }
+    
+    #canvasBarrage {
+      position: absolute;
+      width: 640px;
+      height: 360px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    #videoBarrage {
+      width: 640px;
+      height: 360px;
     }
   </style>
 </head>
@@ -53,7 +69,8 @@
       <div class="row clearfix">
         <div class="col-md-12 text-center">
           <hr>
-          <video :src="STORAGE_SERVER + video.url" width="75%" height="75%" controls="controls"></video>
+          <canvas id="canvasBarrage"></canvas>
+          <video id="videoBarrage" :src="STORAGE_SERVER + video.url" controls="controls"></video>
           <input type="color" style="display: none">
           <div class="row clearfix">
             <div class="col-xs-12 col-md-8 col-md-offset-2 text-center">
@@ -69,9 +86,10 @@
                   </select>
                 </span>
                 <input class="form-control" type="text" placeholder="弹幕内容"
-                       @keyup.enter="sendBarrage" v-model="newBarrage.content">
+                       @keyup.enter="sendBarrage" v-model="newBarrage.content"
+                       minlength="1" maxlength="250">
                 <span class="input-group-btn">
-                  <select class="form-control selectpicker" v-model="newBarrage.postition" title="弹幕位置">
+                  <select class="form-control selectpicker" v-model="newBarrage.position" title="弹幕位置">
                     <option disabled>弹幕位置</option>
                     <option v-for="(c, key) in positions">{{key}}</option>
                   </select>
@@ -80,6 +98,10 @@
                   <button class="btn btn-success" type="button" @click="sendBarrage">发送</button>
                 </span>
               </div>
+              <p :class="['text-center', 'alert', barrageMsg === '发送成功' ? 'alert-success' : 'alert-danger']"
+                 v-if="barrageMsg.length > 0">
+                {{barrageMsg}}
+              </p>
             </div>
           </div>
           <br>
@@ -249,7 +271,10 @@
 <script src="js/vue/nav_vue.js"></script>
 <script src="js/vue/footer_vue.js"></script>
 <script>
+  // 播放量更新
   ajaxVideo.play(VIDEO_INFO.video.id);
+  
+  // 加载评论
   let hasNextPage = false;
   let hasPreviousPage = false;
   let list = [];
@@ -279,6 +304,7 @@
       , liked: false
       , newBarrage: {
         color: '白色'
+        , position: '浮动'
         , content: ''
       }, colors: {
         '白色': '#ffffff'
@@ -288,9 +314,8 @@
         , '蓝色': '#0000ff'
         , '黄色': '#ffff00'
       }, positions: {
-        '浮动': 0
-        , '顶部': 1
-        , '底部': 2
+        '浮动': 2
+        , '固定': 0
       }, newComment: ''
       , comments: list
       , commentsFound: list.length !== 0
@@ -299,7 +324,9 @@
       , canBefore: hasPreviousPage
       , pages
       , to: 1
+      , barrageMsg: ''
       , commentMsg: ''
+      , videoBarrage: {}
     }
     , methods: {
       like() {
@@ -309,6 +336,31 @@
           this.liked = true;
         }
       }, sendBarrage() {
+        if (this.newBarrage.content.trim().length === 0) {
+          this.barrageMsg = '不能发送空弹幕';
+          return;
+        }
+        this.videoBarrage.add({
+          value: this.newBarrage.content
+          , color: this.nowColor
+          , speed: this.nowPosition
+          , time: Math.ceil($('#videoBarrage')[0].currentTime)
+        });
+        const {status, msg} = ajaxBarrage.add({
+          content: this.newBarrage.content
+          , userId: LOGIN_STATUS.user.id
+          , videoId: this.video.id
+          , color: this.nowColor
+          , offtime: Math.ceil($('#videoBarrage')[0].currentTime)
+          , position: this.nowPosition
+        });
+        if (status === undefined || status === "failure") {
+          this.barrageMsg = msg || '网络连接异常';
+          return;
+        } else {
+          this.barrageMsg = '发送成功';
+          this.newBarrage.content = '';
+        }
       }, sendComment() {
         this.commentMsg = '';
         if (this.newComment.trim().length === 0) {
@@ -342,6 +394,20 @@
         this.canBefore = hasPreviousPage;
         this.to = this.offset;
         this.pages = pages;
+      }, likeComment(e) {
+        const idx = e.target.id.replace('comment-', '');
+        const comment = this.comments[idx];
+        ajaxComment.like(comment.id);
+        comment.countLike++;
+        $(`#comment-${idx}`)[0].style.display = 'none';
+        $(`#comment-liked-${idx}`)[0].style.display = 'block';
+      }, deleteComment(e) {
+        const idx = e.target.id.replace('comment-delete-', '');
+        const comment = this.comments[idx];
+        ajaxComment.delete(comment.id);
+        delete this.comments[idx];
+      }, calcTime(localdatetime) {
+        return utils.calcTime(localdatetime.dateTime).toLocaleString();
       }, next(e) {
         if (e.target.classList.contains("disabled")) {
           return;
@@ -399,31 +465,42 @@
         this.canNext = hasNextPage;
         this.canBefore = hasPreviousPage;
         this.pages = pages;
-      }, calcTime(localdatetime) {
-        return utils.calcTime(localdatetime.dateTime).toLocaleString();
-      }, likeComment(e) {
-        const idx = e.target.id.replace('comment-', '');
-        const comment = this.comments[idx];
-        ajaxComment.like(comment.id);
-        comment.countLike++;
-        $(`#comment-${idx}`)[0].style.display = 'none';
-        $(`#comment-liked-${idx}`)[0].style.display = 'block';
-      }, deleteComment(e) {
-        const idx = e.target.id.replace('comment-delete-', '');
-        const comment = this.comments[idx];
-        ajaxComment.delete(comment.id);
-        delete this.comments[idx];
       }
     }, computed: {
       nowColor() {
         return this.colors[this.newBarrage.color];
+      }, nowPosition() {
+        return this.positions[this.newBarrage.position];
       }, reverseColor() {
         const c = Number.parseInt('0x'.concat(this.nowColor.substr(-6)));
         const res = Number("0xffffff") - c;
         return '#' + (Number.isNaN(res) ? "ffffff" : `000000${res.toString(16)}`.substr(-6));
       }
+    }, mounted() {
+      const {barrages} = ajaxBarrage.findId(this.video.id);
+      const rawBarrages = barrages || [{
+        content: ''
+        , offtime: 0
+        , position: 0
+        , color: '#ffffff'
+      }];
+      const dataBarrages = rawBarrages.map(i => {
+        return {
+          value: i.content
+          , time: i.offtime
+          , speed: i.position
+          , color: i.color
+        }
+      });
+      
+      const eleCanvas = $('#canvasBarrage')[0];
+      const eleVideo = $('#videoBarrage')[0];
+      this.videoBarrage = new CanvasBarrage(eleCanvas, eleVideo, {
+        data: dataBarrages
+      });
     }
-  })
+  });
+
 </script>
 </body>
 </html>

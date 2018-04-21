@@ -36,7 +36,7 @@ CREATE TABLE `barrages` (
   `content` varchar(250) NOT NULL COMMENT '弹幕内容',
   `color` varchar(10) NOT NULL COMMENT '弹幕颜色',
   `offtime` int(11) NOT NULL COMMENT '播放偏移时间',
-  `position` tinyint(1) NOT NULL COMMENT '0 浮动弹幕 1 顶部弹幕 2 底部弹幕'
+  `position` tinyint(1) NOT NULL COMMENT '0 固定弹幕 2 浮动弹幕'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='弹幕表';
 
 -- --------------------------------------------------------

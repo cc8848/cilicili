@@ -4,7 +4,7 @@
   "description":"",
   "main":"app.js",
   "scripts":{
-    "app":"node app.js > log.log &"
+    "app":"node app.js"
   },
   "author":"",
   "license":"ISC",

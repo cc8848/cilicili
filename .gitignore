@@ -1,5 +1,5 @@
 .idea
-cilicili.iml
+*.iml
 node_modules
 db.properties
 target

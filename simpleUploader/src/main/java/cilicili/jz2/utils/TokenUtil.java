@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
 
 @Component
 public class TokenUtil {
-	public static final int DEFAULT_MAX_COUNT_AUTH = 1000;
+	public static final Integer DEFAULT_MAX_COUNT_AUTH = 1000;
 	
 	public static class TokenUssage {
 		public static final String DEFAULT = "default";
@@ -70,7 +70,7 @@ public class TokenUtil {
 		return token;
 	}
 	
-	public static Token createToken(int userId, String tokenUssage, int maxCountAuth, Period validPeriod) {
+	public static Token createToken(Integer userId, String tokenUssage, int maxCountAuth, Period validPeriod) {
 		Token token = new Token();
 		token.setUserId(userId);
 		token.setToken(RandomUtil.getRandomToken(userId));
@@ -91,5 +91,9 @@ public class TokenUtil {
 		}
 		token.setExpiretime(ZonedDateTime.now());
 		tokenService.updateToken(token);
+	}
+	
+	public static void destoryOldTokens(Integer userId) {
+		tokenService.deleteTokens(userId);
 	}
 }

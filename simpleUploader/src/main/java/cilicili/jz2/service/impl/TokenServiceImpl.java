@@ -40,4 +40,12 @@ public class TokenServiceImpl implements ITokenService {
 	public void updateToken(Token token) {
 		tokenMapper.updateByPrimaryKeySelective(token);
 	}
+	
+	@Override
+	public void deleteTokens(Integer userId) {
+		TokenExample tokenExample = new TokenExample();
+		TokenExample.Criteria criteria = tokenExample.createCriteria();
+		criteria.andUserIdEqualTo(userId);
+		tokenMapper.deleteByExample(tokenExample);
+	}
 }
